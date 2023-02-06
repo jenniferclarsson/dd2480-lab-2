@@ -1,1 +1,2 @@
 Flask==2.2.2
+github-webhook==1.0.4
