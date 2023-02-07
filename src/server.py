@@ -1,8 +1,6 @@
 from flask import Flask, request, make_response
 from pyngrok import ngrok
-import ssl
 
-ssl._create_default_https_context = ssl._create_unverified_context
 public_url = ngrok.connect(8080).public_url
 app = Flask(__name__)
 
