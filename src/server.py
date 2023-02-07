@@ -1,5 +1,6 @@
 from flask import Flask, request, make_response
 from pyngrok import ngrok
+from utils.utils import *
 
 public_url = ngrok.connect(8080).public_url
 app = Flask(__name__)
@@ -13,6 +14,7 @@ def webhook():
     if request.method == "POST":
         try:
             data = request.json
+            clone_url, branch = parse_json(data)
             return make_response("success", 200)
         except:
             return make_response("fail", 400)
