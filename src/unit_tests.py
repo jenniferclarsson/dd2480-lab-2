@@ -85,12 +85,12 @@ class test_runner_test(TestCase):
         self.assertFalse(run_tests())
 
     def test_should_succeed_when_repo_is_test_project_faultless(self):
-        settings.test_folder = "./../../test_project_faultless/src"
+        settings.test_folder = "./../../test_project_faultless"
         settings.test_file_pattern = "test_main.py"
         self.assertTrue(run_tests())
 
     def test_should_fail_when_repo_is_test_project_failing_tests(self):
-        settings.test_folder = "./../../test_project_failing_tests/src/"
+        settings.test_folder = "./../../test_project_failing_tests"
         settings.test_file_pattern = "test_main.py"
         self.assertFalse(run_tests())
         
