@@ -15,13 +15,19 @@ class parse_json_test(TestCase):
     def setUp(self):
         self.expected_clone_url = "https://github.com/jenniferclarsson/test-repo.git"
         self.expected_branch = "main"
+        self.expected_repo_owner = "jenniferclarsson"
+        self.expected_repo_name = "test-repo"
+        self.expected_commit_sha = "f17b9496a4600bdb21171c331e5e88688936be35"
 
     def test_valid_json(self): 
         with open(os.path.join(ROOT_DIR, "src/test_data/valid_input.json")) as json_file:
             valid_input = json.load(json_file)
-        clone_url, branch = parse_json(valid_input)
+        clone_url, branch, repo_owner, repo_name, commit_sha = parse_json(valid_input)
         self.assertEqual(clone_url, self.expected_clone_url)
         self.assertEqual(branch, self.expected_branch)
+        self.assertEqual(repo_owner, self.expected_repo_owner)
+        self.assertEqual(repo_name, self.expected_repo_name)
+        self.assertEqual(commit_sha, self.expected_commit_sha)
     
     def test_invalid_json(self):
         with open(os.path.join(ROOT_DIR, "src/test_data/invalid_input_no_url.json")) as json_file:

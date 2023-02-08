@@ -15,7 +15,7 @@ def webhook():
     if request.method == "POST":
         try:
             data = request.json
-            clone_url, branch = parse_json(data)
+            clone_url, branch, repo_owner, repo_name, commit_sha = parse_json(data)
             return make_response("success", 200)
         except:
             return make_response("fail", 400)
