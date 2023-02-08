@@ -1,10 +1,11 @@
 '''
 FAULTLESS TEST CASES 
 '''
+from src.main import *
+
 from pathlib import Path
 from unittest import main, TestCase
 
-from main import *
 
 # Tests goes here, see https://docs.python.org/3/library/unittest.html
 
