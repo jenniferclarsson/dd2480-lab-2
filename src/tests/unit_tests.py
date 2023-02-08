@@ -1,5 +1,7 @@
 from unittest import main, TestCase
+from sys import stdout
 from utils.utils import *
+import utils.settings as settings
 import json
 from pathlib import Path
 import shutil
@@ -47,6 +49,29 @@ class GitCloneTest(TestCase):
     def test_should_fail_when_given_correct_link_but_unexisting_branch(self):
         res = clone_repo(self.git_url, self.repo_dir, 'branch_that_doesnt_exist')
         self.assertEqual(res, 'clone failed')              
+
+# --------------- TEST RUNNER TEST -----------------
+class test_runner_test(TestCase):
+
+    def setUp(self):
+        settings.test_folder = "./tests/test_data/dummy_tests"
+        settings.test_output_file = "/tmp/garbage.log"
+
+    def tearDown(self):
+        os.remove(settings.test_output_file)
+
+    def test_should_succed_when_test_passes(self):
+        settings.test_file_pattern = "should_succeed_tests.py"
+        self.assertTrue(run_tests())
+
+    def test_should_fail_when_test_fails(self):
+        settings.test_file_pattern = "should_fail_tests.py"
+        self.assertFalse(run_tests())
+
+    def test_should_fail_when_test_errors(self):
+        settings.test_file_pattern = "should_fail_tests.py"
+        self.assertFalse(run_tests())
+
 
 if __name__ == "__main__":
     main()

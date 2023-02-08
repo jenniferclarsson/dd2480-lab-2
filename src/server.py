@@ -1,6 +1,7 @@
 from flask import Flask, request, make_response
 from pyngrok import ngrok
 from utils.utils import *
+import utils.settings as settings
 
 public_url = ngrok.connect(8080).public_url
 app = Flask(__name__)
