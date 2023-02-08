@@ -1,5 +1,5 @@
 from unittest import main, TestCase
-from sys import stdout
+import sys
 from utils.utils import *
 import utils.settings as settings
 import json
@@ -64,8 +64,12 @@ class test_runner_test(TestCase):
     def setUp(self):
         settings.test_folder = "./test_data/dummy_tests"
         settings.test_output_file = "/tmp/garbage.log"
+        self.current_modules = list(sys.modules.keys())
 
     def tearDown(self):
+        for newly_imported_module in filter(lambda module: module not in self.current_modules, list(sys.modules.keys())):
+            del sys.modules[newly_imported_module]
+
         os.remove(settings.test_output_file)
 
     def test_should_succed_when_test_passes(self):
@@ -80,6 +84,16 @@ class test_runner_test(TestCase):
         settings.test_file_pattern = "should_fail_tests.py"
         self.assertFalse(run_tests())
 
+    def test_should_succeed_when_repo_is_test_project_faultless(self):
+        settings.test_folder = "./../../test_project_faultless/src"
+        settings.test_file_pattern = "test_main.py"
+        self.assertTrue(run_tests())
+
+    def test_should_fail_when_repo_is_test_project_failing_tests(self):
+        settings.test_folder = "./../../test_project_failing_tests/src/"
+        settings.test_file_pattern = "test_main.py"
+        self.assertFalse(run_tests())
+        
 # --------------- BUILD TEST -----------------
 class build_test(TestCase):
 

@@ -3,7 +3,7 @@ FAULTLESS TEST CASES
 '''
 from unittest import main, TestCase
 
-from src.main import *
+from main import *
 
 # Tests goes here, see https://docs.python.org/3/library/unittest.html
 
