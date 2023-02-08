@@ -57,7 +57,7 @@ class GitCloneTest(TestCase):
 class test_runner_test(TestCase):
 
     def setUp(self):
-        settings.test_folder = "./tests/test_data/dummy_tests"
+        settings.test_folder = "./test_data/dummy_tests"
         settings.test_output_file = "/tmp/garbage.log"
 
     def tearDown(self):
