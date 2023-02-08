@@ -28,7 +28,6 @@ class parse_json_test(TestCase):
             invalid_input = json.load(json_file)
         self.assertEqual(parse_json(invalid_input), "invalid json")  
 
-
 # --------------- GIT CLONE TEST -----------------
 class GitCloneTest(TestCase):
 
@@ -90,6 +89,28 @@ class build_test(TestCase):
         res = syntax_check(os.path.join(ROOT_DIR, "invalid_path_to_project"))
         self.assertEqual(res, "build failed")
 
+# --------------- GIT COMMIT STATUS TEST -----------------
+class git_commit_status_test(TestCase):
+
+    def setUp(self):
+        self.git_user = settings.GIT_USER
+        self.git_token = settings.GIT_TOKEN
+        self.git_repo = settings.GIT_REPO
+        self.git_repo_owner = settings.GIT_REPO_OWNER
+        self.git_sha = settings.GIT_SHA
+        self.git_broken_sha = settings.GIT_BROKEN_SHA
+
+    def test_should_succeed_when_given_correct_info(self):
+        res = set_commit_status(self.git_repo_owner, self.git_repo, self.git_sha, 'success')
+        self.assertEqual(res, 'commit status succeded')
+
+    def test_should_fail_when_given_broken_sha(self):
+        res = set_commit_status(self.git_repo_owner, self.git_repo, self.git_broken_sha, 'success')
+        self.assertEqual(res, 'commit status failed')
+
+    def test_should_fail_when_given_invalid_state(self):
+        res = set_commit_status(self.git_repo_owner, self.git_repo, self.git_sha, 'succes')
+        self.assertEqual(res, 'commit status failed')  
 
 if __name__ == "__main__":
     main()
