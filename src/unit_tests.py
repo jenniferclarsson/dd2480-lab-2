@@ -7,7 +7,7 @@ from pathlib import Path
 import shutil
 import os
 
-ROOT_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), "../.."))
+ROOT_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), ".."))
 
 # --------------- PARSE JSON TEST -----------------
 class parse_json_test(TestCase):
@@ -17,14 +17,14 @@ class parse_json_test(TestCase):
         self.expected_branch = "main"
 
     def test_valid_json(self): 
-        with open(os.path.join(ROOT_DIR, "src/tests/test_data/valid_input.json")) as json_file:
+        with open(os.path.join(ROOT_DIR, "src/test_data/valid_input.json")) as json_file:
             valid_input = json.load(json_file)
         clone_url, branch = parse_json(valid_input)
         self.assertEqual(clone_url, self.expected_clone_url)
         self.assertEqual(branch, self.expected_branch)
     
     def test_invalid_json(self):
-        with open(os.path.join(ROOT_DIR, "src/tests/test_data/invalid_input_no_url.json")) as json_file:
+        with open(os.path.join(ROOT_DIR, "src/test_data/invalid_input_no_url.json")) as json_file:
             invalid_input = json.load(json_file)
         self.assertEqual(parse_json(invalid_input), "invalid json")  
 
