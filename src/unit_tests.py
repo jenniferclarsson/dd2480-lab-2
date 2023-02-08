@@ -118,5 +118,37 @@ class git_commit_status_test(TestCase):
         res = set_commit_status(self.git_repo_owner, self.git_repo, self.git_sha, 'succes')
         self.assertEqual(res, 'commit status failed')  
 
+# --------------- CREATE BUILD LOG ENTRY -----------------
+class create_build_log_check(TestCase):
+
+    def tearDown(self):
+        try:
+            os.remove("./src/build_logs/" + self.created_log + ".log")
+        except FileNotFoundError:
+            print("A log file was not created or could not be found.")
+
+
+    def test_should_succeed_when_log_is_created(self):
+        log_created = False
+        build_id = create_build_log_entry("123", "success")
+        self.created_log = build_id
+        try:
+            log_relative_path = r"./src/build_logs/" + build_id + ".log"
+            # Try opening the file to see that it was created
+            log = open(log_relative_path)
+            log.close()
+            log_created = True
+        except FileNotFoundError:
+            pass
+        self.assertEqual(log_created, True)
+
+
+# --------------- BUILD LOG HTML ELEMENT TEST -----------------
+class log_html_element_check(TestCase):
+    
+    def test_should_succeed_when_input_is_correctly_formatted(self):
+        res = build_log_html_element("text\nto\nHTML\nformat\ncorrectly")
+        self.assertEqual(res, "<div><span style='font-weight:bold'>text<br>to<br>HTML<br>format<br>correctly</span></div>")
+
 if __name__ == "__main__":
     main()
