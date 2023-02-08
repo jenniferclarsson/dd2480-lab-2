@@ -2,7 +2,7 @@ import os
 from unittest import TestLoader, TextTestRunner
 
 from git import Repo
-
+import requests
 import utils.settings as settings
 
 def run_tests():
@@ -32,3 +32,15 @@ def clone_repo(git_url, repo_dir, branch):
         return 'clone succeded'
     except:
         return 'clone failed'
+
+# -- SET STATUS OF COMMIT --
+# owner = owner of the repo
+# repo = name of the repo
+# sha = sha hash of the commit
+# state = error | failure | pending | success
+def set_commit_status(owner, repo, sha, state):
+    api_url = f'https://api.github.com/repos/{owner}/{repo}/statuses/{sha}'
+    response = requests.post(api_url, auth=(settings.GIT_USER, settings.GIT_TOKEN), json={'state':state})
+    if response.status_code < 300:
+        return 'commit status succeded'
+    return 'commit status failed'
