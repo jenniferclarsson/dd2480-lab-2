@@ -14,14 +14,14 @@ class parse_json_test(TestCase):
         self.expected_branch = "main"
 
     def test_valid_json(self): 
-        with open('src/tests/test_data/valid_input.json') as json_file:
+        with open('src/test_data/valid_input.json') as json_file:
             valid_input = json.load(json_file)
         clone_url, branch = parse_json(valid_input)
         self.assertEqual(clone_url, self.expected_clone_url)
         self.assertEqual(branch, self.expected_branch)
     
     def test_invalid_json(self):
-        with open('src/tests/test_data/invalid_input_no_url.json') as json_file:
+        with open('src/test_data/invalid_input_no_url.json') as json_file:
             invalid_input = json.load(json_file)
         self.assertEqual(parse_json(invalid_input), "invalid json")  
 
@@ -54,7 +54,7 @@ class GitCloneTest(TestCase):
 class test_runner_test(TestCase):
 
     def setUp(self):
-        settings.test_folder = "./tests/test_data/dummy_tests"
+        settings.test_folder = "./test_data/dummy_tests"
         settings.test_output_file = "/tmp/garbage.log"
 
     def tearDown(self):
@@ -71,7 +71,6 @@ class test_runner_test(TestCase):
     def test_should_fail_when_test_errors(self):
         settings.test_file_pattern = "should_fail_tests.py"
         self.assertFalse(run_tests())
-
 
 if __name__ == "__main__":
     main()

@@ -21,5 +21,6 @@ def webhook():
             return make_response("fail", 400)
 
 if __name__ == "__main__":
-    print(public_url)
-    app.run(port=8080)
+    print(run_tests())
+    # print(public_url)
+    # app.run(port=8080)
