@@ -15,10 +15,26 @@ def webhook():
     if request.method == "POST":
         try:
             data = request.json
-            clone_url, branch = parse_json(data)
+            clone_url, branch, repo_owner, repo_name, commit_sha = parse_json(data)
             return make_response("success", 200)
         except:
             return make_response("fail", 400)
+
+# "Build histroy" routes
+@app.route("/builds/<build_id>")
+def get_build_info_html(build_id):
+    try:
+        log_relative_path = r"./src/build_logs/" + build_id + ".log"
+        with open(log_relative_path) as log:
+            log_lines = log.readlines()
+            log.close()
+    
+        log_newline_seperated_string = "\n".join(log_lines)
+        log_html_formatted = build_log_html_element(log_newline_seperated_string)
+
+        return log_html_formatted
+    except FileNotFoundError:
+        return "<p>the build you are trying to access does not exist.<p>"
 
 if __name__ == "__main__":
     print(public_url)

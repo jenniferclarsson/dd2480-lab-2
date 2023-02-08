@@ -5,6 +5,9 @@ import utils.settings as settings
 import json
 from pathlib import Path
 import shutil
+import os
+
+ROOT_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), ".."))
 
 # --------------- PARSE JSON TEST -----------------
 class parse_json_test(TestCase):
@@ -12,19 +15,24 @@ class parse_json_test(TestCase):
     def setUp(self):
         self.expected_clone_url = "https://github.com/jenniferclarsson/test-repo.git"
         self.expected_branch = "main"
+        self.expected_repo_owner = "jenniferclarsson"
+        self.expected_repo_name = "test-repo"
+        self.expected_commit_sha = "f17b9496a4600bdb21171c331e5e88688936be35"
 
     def test_valid_json(self): 
-        with open('src/test_data/valid_input.json') as json_file:
+        with open(os.path.join(ROOT_DIR, "src/test_data/valid_input.json")) as json_file:
             valid_input = json.load(json_file)
-        clone_url, branch = parse_json(valid_input)
+        clone_url, branch, repo_owner, repo_name, commit_sha = parse_json(valid_input)
         self.assertEqual(clone_url, self.expected_clone_url)
         self.assertEqual(branch, self.expected_branch)
+        self.assertEqual(repo_owner, self.expected_repo_owner)
+        self.assertEqual(repo_name, self.expected_repo_name)
+        self.assertEqual(commit_sha, self.expected_commit_sha)
     
     def test_invalid_json(self):
-        with open('src/test_data/invalid_input_no_url.json') as json_file:
+        with open(os.path.join(ROOT_DIR, "src/test_data/invalid_input_no_url.json")) as json_file:
             invalid_input = json.load(json_file)
         self.assertEqual(parse_json(invalid_input), "invalid json")  
-
 
 # --------------- GIT CLONE TEST -----------------
 class GitCloneTest(TestCase):
@@ -85,6 +93,76 @@ class test_runner_test(TestCase):
         settings.test_folder = "./../../test_project_failing_tests/src/"
         settings.test_file_pattern = "test_main.py"
         self.assertFalse(run_tests())
+        
+# --------------- BUILD TEST -----------------
+class build_test(TestCase):
+
+    def test_build_success_when_faultless_project(self):
+        res = syntax_check(os.path.join(ROOT_DIR, "test_project_faultless"))
+        self.assertEqual(res, "build successful")
+
+    def test_build_fail_when_faulty_project(self):
+        res = syntax_check(os.path.join(ROOT_DIR, "test_project_error"))
+        self.assertEqual(res, "build failed")
+
+    def test_build_fail_when_invalid_path(self):
+        res = syntax_check(os.path.join(ROOT_DIR, "invalid_path_to_project"))
+        self.assertEqual(res, "build failed")
+
+# --------------- GIT COMMIT STATUS TEST -----------------
+class git_commit_status_test(TestCase):
+
+    def setUp(self):
+        self.git_user = settings.GIT_USER
+        self.git_token = settings.GIT_TOKEN
+        self.git_repo = settings.GIT_REPO
+        self.git_repo_owner = settings.GIT_REPO_OWNER
+        self.git_sha = settings.GIT_SHA
+        self.git_broken_sha = settings.GIT_BROKEN_SHA
+
+    def test_should_succeed_when_given_correct_info(self):
+        res = set_commit_status(self.git_repo_owner, self.git_repo, self.git_sha, 'success')
+        self.assertEqual(res, 'commit status succeded')
+
+    def test_should_fail_when_given_broken_sha(self):
+        res = set_commit_status(self.git_repo_owner, self.git_repo, self.git_broken_sha, 'success')
+        self.assertEqual(res, 'commit status failed')
+
+    def test_should_fail_when_given_invalid_state(self):
+        res = set_commit_status(self.git_repo_owner, self.git_repo, self.git_sha, 'succes')
+        self.assertEqual(res, 'commit status failed')  
+
+# --------------- CREATE BUILD LOG ENTRY -----------------
+class create_build_log_check(TestCase):
+
+    def tearDown(self):
+        try:
+            os.remove("./src/build_logs/" + self.created_log + ".log")
+        except FileNotFoundError:
+            print("A log file was not created or could not be found.")
+
+
+    def test_should_succeed_when_log_is_created(self):
+        log_created = False
+        build_id = create_build_log_entry("123", "success")
+        self.created_log = build_id
+        try:
+            log_relative_path = r"./src/build_logs/" + build_id + ".log"
+            # Try opening the file to see that it was created
+            log = open(log_relative_path)
+            log.close()
+            log_created = True
+        except FileNotFoundError:
+            pass
+        self.assertEqual(log_created, True)
+
+
+# --------------- BUILD LOG HTML ELEMENT TEST -----------------
+class log_html_element_check(TestCase):
+    
+    def test_should_succeed_when_input_is_correctly_formatted(self):
+        res = build_log_html_element("text\nto\nHTML\nformat\ncorrectly")
+        self.assertEqual(res, "<div><span style='font-weight:bold'>text<br>to<br>HTML<br>format<br>correctly</span></div>")
 
 if __name__ == "__main__":
     main()
