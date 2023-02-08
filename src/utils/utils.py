@@ -2,6 +2,9 @@ import os
 from unittest import TestLoader, TextTestRunner
 
 from git import Repo
+from pylint import lint
+from pylint.reporters import text
+from io import StringIO
 
 import utils.settings as settings
 
@@ -32,3 +35,16 @@ def clone_repo(git_url, repo_dir, branch):
         return 'clone succeded'
     except:
         return 'clone failed'
+    
+def syntax_check(path):
+    try: 
+        args = ["--disable=W,R,C,undefined-variable", path + "/src"]
+        pylint_output = StringIO()
+        reporter = text.ColorizedTextReporter(pylint_output)
+        run = lint.Run(args, reporter=reporter, exit=False)
+        stats= run.linter.stats
+        if stats.error != 0 or stats.fatal != 0:
+            return "build failed"
+        return "build successful"
+    except:
+        return "build failed"

@@ -1,3 +1,4 @@
 Flask==2.2.2
 pyngrok==5.2.1
 GitPython==3.1.30
+pylint==2.16.1

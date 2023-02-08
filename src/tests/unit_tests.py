@@ -5,6 +5,9 @@ import utils.settings as settings
 import json
 from pathlib import Path
 import shutil
+import os
+
+ROOT_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), "../.."))
 
 # --------------- PARSE JSON TEST -----------------
 class parse_json_test(TestCase):
@@ -14,14 +17,14 @@ class parse_json_test(TestCase):
         self.expected_branch = "main"
 
     def test_valid_json(self): 
-        with open('src/tests/test_data/valid_input.json') as json_file:
+        with open(os.path.join(ROOT_DIR, "src/tests/test_data/valid_input.json")) as json_file:
             valid_input = json.load(json_file)
         clone_url, branch = parse_json(valid_input)
         self.assertEqual(clone_url, self.expected_clone_url)
         self.assertEqual(branch, self.expected_branch)
     
     def test_invalid_json(self):
-        with open('src/tests/test_data/invalid_input_no_url.json') as json_file:
+        with open(os.path.join(ROOT_DIR, "src/tests/test_data/invalid_input_no_url.json")) as json_file:
             invalid_input = json.load(json_file)
         self.assertEqual(parse_json(invalid_input), "invalid json")  
 
@@ -71,6 +74,21 @@ class test_runner_test(TestCase):
     def test_should_fail_when_test_errors(self):
         settings.test_file_pattern = "should_fail_tests.py"
         self.assertFalse(run_tests())
+
+# --------------- BUILD TEST -----------------
+class build_test(TestCase):
+
+    def test_build_success_when_faultless_project(self):
+        res = syntax_check(os.path.join(ROOT_DIR, "test_project_faultless"))
+        self.assertEqual(res, "build successful")
+
+    def test_build_fail_when_faulty_project(self):
+        res = syntax_check(os.path.join(ROOT_DIR, "test_project_error"))
+        self.assertEqual(res, "build failed")
+
+    def test_build_fail_when_invalid_path(self):
+        res = syntax_check(os.path.join(ROOT_DIR, "invalid_path_to_project"))
+        self.assertEqual(res, "build failed")
 
 
 if __name__ == "__main__":
