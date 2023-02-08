@@ -10,14 +10,19 @@ from io import StringIO
 import requests
 import utils.settings as settings
 
-def run_tests():
+def run_tests(test_folder=None, test_file_pattern=None, test_output_file=None):
+
+    test_folder = settings.test_folder if test_folder is None else test_folder
+    test_file_pattern = settings.test_file_pattern if test_file_pattern is None else test_file_pattern
+    test_output_file = settings.test_output_file if test_output_file is None else test_output_file
+
     sep = os.path.sep
     curdir = os.path.dirname(__file__).split(sep)
-    test_folder = sep.join(curdir + settings.test_folder.split(sep)) if not os.path.isabs(settings.test_folder) else settings.test_folder
-    test_output_file = sep.join(curdir + settings.test_output_file.split(sep)) if not os.path.isabs(settings.test_output_file) else settings.test_output_file
+    test_folder = sep.join(curdir + test_folder.split(sep)) if not os.path.isabs(test_folder) else test_folder
+    test_output_file = sep.join(curdir + test_output_file.split(sep)) if not os.path.isabs(test_output_file) else test_output_file
 
     testloader = TestLoader()
-    tests = testloader.discover(test_folder, settings.test_file_pattern)
+    tests = testloader.discover(test_folder, test_file_pattern)
     with open(test_output_file, "w") as f:
         testrunner = TextTestRunner(f)
         run = testrunner.run(tests)
