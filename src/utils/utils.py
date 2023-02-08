@@ -26,7 +26,10 @@ def parse_json(data):
     try:
         clone_url = data["repository"]["clone_url"]
         branch = data["ref"].replace("refs/heads/", "")
-        return clone_url, branch
+        repo_owner = data["repository"]["owner"]["name"]
+        repo_name = data["repository"]["name"]
+        commit_sha = data["after"]
+        return clone_url, branch, repo_owner, repo_name, commit_sha
     except:
         return "invalid json"
 
