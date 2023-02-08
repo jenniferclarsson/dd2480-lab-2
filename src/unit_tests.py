@@ -73,26 +73,20 @@ class test_runner_test(TestCase):
         os.remove(settings.test_output_file)
 
     def test_should_succed_when_test_passes(self):
-        settings.test_file_pattern = "should_succeed_tests.py"
-        self.assertTrue(run_tests())
+        self.assertTrue(run_tests(test_file_pattern="should_succeed_tests.py"))
 
     def test_should_fail_when_test_fails(self):
-        settings.test_file_pattern = "should_fail_tests.py"
-        self.assertFalse(run_tests())
+        self.assertFalse(run_tests(test_file_pattern="should_fail_tests.py"))
 
     def test_should_fail_when_test_errors(self):
-        settings.test_file_pattern = "should_fail_tests.py"
-        self.assertFalse(run_tests())
+        self.assertFalse(run_tests(test_file_pattern="should_error_tests.py"))
 
     def test_should_succeed_when_repo_is_test_project_faultless(self):
-        settings.test_folder = "./../../test_project_faultless"
-        settings.test_file_pattern = "test_main.py"
-        self.assertTrue(run_tests())
+        self.assertTrue(run_tests(test_folder="./../../test_project_faultless", test_file_pattern="test_main.py"))
 
     def test_should_fail_when_repo_is_test_project_failing_tests(self):
-        settings.test_folder = "./../../test_project_failing_tests"
-        settings.test_file_pattern = "test_main.py"
-        self.assertFalse(run_tests())
+        self.assertFalse(run_tests(test_folder="./../../test_project_failing_tests", test_file_pattern="test_main.py"))
+
         
 # --------------- BUILD TEST -----------------
 class build_test(TestCase):
