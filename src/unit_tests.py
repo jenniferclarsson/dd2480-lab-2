@@ -182,5 +182,20 @@ class log_html_element_check(TestCase):
         res = build_log_html_element("text\nto\nHTML\nformat\ncorrectly")
         self.assertEqual(res, "<div><span style='font-weight:bold'>text<br>to<br>HTML<br>format<br>correctly</span></div>")
 
+    def test_should_fail_when_input_string_is_empty(self):
+        res = build_log_html_element("")
+        self.assertEqual(res, "<p>Error: This build log is empty.</p>")
+
+# --------------- BUILD LOG HISTORY HTML ELEMENT TEST -----------------
+class log_history_html_element_check(TestCase):
+    
+    def test_should_succeed_when_input_is_correctly_formatted(self):
+        res = build_log_history_html_element(["bid2000","bid1000"])
+        self.assertEqual(res, "<div><span style='font-weight:bold'>List of all CI-server builds:</span><br><a href='/builds/bid2000'>bid2000</a><br><a href='/builds/bid1000'>bid1000</a></div>")
+
+    def test_should_fail_when_input_string_is_empty(self):
+        res = build_log_history_html_element([])
+        self.assertEqual(res, "<p>There is currently no build history for this CI-server.</p>")
+
 if __name__ == "__main__":
     main()
