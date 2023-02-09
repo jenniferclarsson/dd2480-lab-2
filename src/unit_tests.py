@@ -35,7 +35,7 @@ class parse_json_test(TestCase):
         self.assertEqual(parse_json(invalid_input), "invalid json")  
 
 # --------------- GIT CLONE TEST -----------------
-class GitCloneTest(TestCase):
+class git_clone_test(TestCase):
 
     def setUp(self):
         self.git_url = 'git@github.com:edbag22/clone-repo-test.git'
@@ -48,7 +48,7 @@ class GitCloneTest(TestCase):
 
         #Remove clone if succeded
         if (res == 'clone succeded'):
-            shutil.rmtree(self.repo_dir)
+            remove_repo(self.repo_dir)
 
     def test_should_fail_when_given_broken_link_but_correct_branch(self):
         res = clone_repo(self.broken_git_url, self.repo_dir, 'main')
@@ -56,7 +56,22 @@ class GitCloneTest(TestCase):
 
     def test_should_fail_when_given_correct_link_but_unexisting_branch(self):
         res = clone_repo(self.git_url, self.repo_dir, 'branch_that_doesnt_exist')
-        self.assertEqual(res, 'clone failed')              
+        self.assertEqual(res, 'clone failed')  
+
+# --------------- REMOVE REPO TEST -----------------
+class remove_repo_test(TestCase):
+
+    def setUp(self):
+        self.repo_dir = Path('/tmp/repo-dir-to-be-deleted/')
+
+    def test_should_succeed_when_dir_exists(self):
+        os.mkdir(self.repo_dir)
+        res = remove_repo(self.repo_dir)
+        self.assertEqual(res, 'Repo deleted')
+
+    def test_should_fail_when_dir_does_not_exist(self):
+        res = remove_repo(self.repo_dir)
+        self.assertEqual(res, 'Invalid path')       
 
 # --------------- TEST RUNNER TEST -----------------
 class test_runner_test(TestCase):
