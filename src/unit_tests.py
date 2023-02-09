@@ -107,15 +107,15 @@ class test_runner_test(TestCase):
 class build_test(TestCase):
 
     def test_build_success_when_faultless_project(self):
-        res = syntax_check(os.path.join(ROOT_DIR, "test_project_faultless"))
+        res = syntax_check(os.path.join(ROOT_DIR, "test_project_faultless/src"))
         self.assertEqual(res, "build successful")
 
     def test_build_fail_when_faulty_project(self):
-        res = syntax_check(os.path.join(ROOT_DIR, "test_project_error"))
+        res = syntax_check(os.path.join(ROOT_DIR, "test_project_error/src"))
         self.assertEqual(res, "build failed")
 
     def test_build_fail_when_invalid_path(self):
-        res = syntax_check(os.path.join(ROOT_DIR, "invalid_path_to_project"))
+        res = syntax_check(os.path.join(ROOT_DIR, "invalid_path_to_project/src"))
         self.assertEqual(res, "build failed")
 
 # --------------- GIT COMMIT STATUS TEST -----------------

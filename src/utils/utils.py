@@ -55,7 +55,7 @@ def remove_repo(repo_dir):
     
 def syntax_check(path):
     try: 
-        args = ["--disable=W,R,C,undefined-variable", path + "/src"]
+        args = ["--disable=W,R,C,undefined-variable", str(path)]
         pylint_output = StringIO()
         reporter = text.ColorizedTextReporter(pylint_output)
         run = lint.Run(args, reporter=reporter, exit=False)
