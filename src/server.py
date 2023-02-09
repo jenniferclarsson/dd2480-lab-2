@@ -18,6 +18,23 @@ def webhook():
         if headers["X-GitHub-Event"] == "push":
             try:
                 clone_url, branch, repo_owner, repo_name, commit_sha = parse_json(data)
+                clone_repo(clone_url, settings.repo_dir, branch)
+                build_result = syntax_check(settings.repo_dir_src)
+                log_entry = 'Build failed'
+                commit_status = 'error'
+                if build_result == "build successful":
+                    test_results = run_tests(settings.repo_dir_src)
+                    log_entry = 'Tests failed'
+                    if test_results:
+                        commit_status = 'success'
+                        log_entry = 'Success'
+                
+                set_commit_status(repo_owner, repo_name, commit_sha, commit_status)
+
+                create_build_log_entry(commit_sha, log_entry)
+
+                remove_repo(settings.repo_dir)
+                
                 return make_response("success", 200)
             except:
                 return make_response("fail", 400)
