@@ -45,4 +45,4 @@ GIT_BROKEN_SHA = '**SHA OF A NON EXISTING COMMIT**'
 
 - Erik Hedlund: Implement automatic test running. Integrating the repositories' test cases. Integrate dummy repositories test cases. Update README.
 
-- Jennifer Larsson: Setting up git interfacing library. Set up main repository. Implementing static syntax checking. Stitching all sub-steps together
+- Jennifer Larsson: Setting up git interfacing library. Set up main repository. Implementing static syntax checking. Stitching all sub-steps together. Parsing request json-object.
