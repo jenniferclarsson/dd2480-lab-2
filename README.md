@@ -45,4 +45,11 @@ GIT_BROKEN_SHA = '**SHA OF A NON EXISTING COMMIT**'
 --To be written--
 
 ## List of contributions
---To be written--
+
+- August Tengland: Dummy repos to test against. Build history for P+. Implementation of build log. Automatic wrapping around Ngrok. Implementing build history website.
+
+- Edvin Baggman: Setting notification status for build fails. Implementation of the git cloning. Update README. Stitching all sub-steps together.
+
+- Erik Hedlund: Implement automatic test running. Integrating the repositories' test cases. Integrate dummy repositories test cases. Update README.
+
+- Jennifer Larsson: Setting up git interfacing library. Set up main repository. Implementing static syntax checking. Stitching all sub-steps together. Parsing request json-object.
