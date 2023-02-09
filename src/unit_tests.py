@@ -97,10 +97,10 @@ class test_runner_test(TestCase):
         self.assertFalse(run_tests(test_file_pattern="should_error_tests.py"))
 
     def test_should_succeed_when_repo_is_test_project_faultless(self):
-        self.assertTrue(run_tests(test_folder="./../../test_project_faultless", test_file_pattern="test_main.py"))
+        self.assertTrue(run_tests(test_folder=os.path.join(ROOT_DIR, "test_project_faultless"), test_file_pattern="test_main.py"))
 
     def test_should_fail_when_repo_is_test_project_failing_tests(self):
-        self.assertFalse(run_tests(test_folder="./../../test_project_failing_tests", test_file_pattern="test_main.py"))
+        self.assertFalse(run_tests(test_folder=os.path.join(ROOT_DIR, "test_project_failing_tests"), test_file_pattern="test_main.py"))
 
         
 # --------------- BUILD TEST -----------------
