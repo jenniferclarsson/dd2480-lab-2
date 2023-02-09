@@ -6,7 +6,7 @@ from pylint import lint
 from datetime import datetime
 from pylint.reporters import text
 from io import StringIO
-
+import shutil
 import requests
 import utils.settings as settings
 
@@ -45,6 +45,13 @@ def clone_repo(git_url, repo_dir, branch):
         return 'clone succeded'
     except:
         return 'clone failed'
+
+def remove_repo(repo_dir):
+    try:
+        shutil.rmtree(repo_dir)
+        return 'Repo deleted'
+    except:
+        return 'Invalid path'
     
 def syntax_check(path):
     try: 
