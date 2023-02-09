@@ -83,6 +83,8 @@ def create_build_log_entry(commit_id, build_result):
         build_id = "bid" + time_now.strftime("%Y%m%d%H%M%S")
         build_time = time_now.strftime("%Y-%m-%d %H:%M:%S")
         log_message = "build-id: " + str(build_id) + "\ncommit-id:" + commit_id + "\nbuild_time:" + build_time + "\nbuild_result:" + build_result
+        if not os.path.exists("./src/build_logs"):
+            os.makedirs("./src/build_logs")
         f = open("./src/build_logs/" + build_id + ".log", "x")
         f.write(log_message)
         f.close()

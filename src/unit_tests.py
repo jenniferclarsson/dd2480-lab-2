@@ -165,6 +165,15 @@ class create_build_log_check(TestCase):
             pass
         self.assertEqual(log_created, True)
 
+    # Test to make sure that build_logs is created if it does not already exist
+    def test_should_succeed_when_log_directory_is_created(self):
+        log_directory_created = False
+        build_id = create_build_log_entry("123", "success")
+        self.created_log = build_id
+        if os.path.exists("./src/build_logs"):
+            log_directory_created = True 
+        self.assertEqual(log_directory_created, True)
+
 
 # --------------- BUILD LOG HTML ELEMENT TEST -----------------
 class log_html_element_check(TestCase):
