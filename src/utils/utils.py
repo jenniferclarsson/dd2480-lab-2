@@ -69,9 +69,26 @@ def syntax_check(path):
 # -- CREATE A LOG HTML ELEMENT --
 # Wraps build log information in HTML tags for better presentation in browser
 def build_log_html_element(log_newline_seperated_string):
-    log_br_seperated = log_newline_seperated_string.replace("\n","<br>")
-    log_html_element = "<div><span style='font-weight:bold'>" + log_br_seperated + "</span></div>"
-    return log_html_element
+    if log_newline_seperated_string == "":
+        return "<p>Error: This build log is empty.</p>"
+    else:
+        log_br_seperated = log_newline_seperated_string.replace("\n","<br>")
+        log_html_element = "<div><span style='font-weight:bold'>" + log_br_seperated + "</span></div>"
+        return log_html_element
+
+# -- CREATE A LOG HISTORY HTML ELEMENT --
+# Wraps all log names in HTML tags for better presentation in browser
+def build_log_history_html_element(log_filename_list):
+    if len(log_filename_list) == 0:
+        return "<p>There is currently no build history for this CI-server.</p>"
+    else:
+        log_html_elements = []
+        for filename in log_filename_list:
+            log_html_elements.append("<a href='/builds/" + filename + "'>" + filename + "</a>")
+        log_history_br_seperated = "<br>".join(log_html_elements)
+        list_first_line = "<span style='font-weight:bold'>List of all CI-server builds:</span><br>"
+        log_history_html_element = "<div>" + list_first_line + log_history_br_seperated + "</div>"
+        return log_history_html_element
 
 # -- CREATE A .LOG BUILD FILE --
 # Creates a .log file containing information on the build and its result

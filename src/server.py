@@ -41,7 +41,7 @@ def webhook():
         elif headers["X-GitHub-Event"] == "ping":
             return make_response("ping", 200)
 
-# "Build histroy" routes
+# "Build result" route
 @app.route("/builds/<build_id>")
 def get_build_info_html(build_id):
     try:
@@ -56,6 +56,24 @@ def get_build_info_html(build_id):
         return log_html_formatted
     except FileNotFoundError:
         return "<p>the build you are trying to access does not exist.<p>"
+
+# "Build history list" route
+@app.route("/builds/all")
+def get_build_history_html():
+    directory_path = "./src/build_logs/"
+    try:
+        if len(os.listdir(directory_path)) == 0:
+            return "<p>There is currently no build history for this CI-server.</p>"
+        else:  
+            all_log_names = []  
+            for log_filename in os.listdir(directory_path):
+                log_id_no_filetype = log_filename.split('.')[0]  
+                all_log_names.append(log_id_no_filetype)
+            all_log_names.reverse()
+            return build_log_history_html_element(all_log_names)
+
+    except FileNotFoundError:
+        return "<p>There is currently no build history for this CI-server.</p>"
 
 if __name__ == "__main__":
     print(public_url)
