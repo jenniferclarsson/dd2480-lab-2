@@ -19,6 +19,13 @@ GIT_TOKEN = '**GIT PERSONAL ACCESS TOKEN TO GIT_USER**'
 * Run `python3 src/server.py` to run the server and make it visable on the internet. This command will output a public URL `xyz.ngrok.io`.
 * Add a webhook on github using this payload URL `xyz.ngrok.io/github`. Content type should be `application/json`, the rest of the settings should be default.
 
+### Note
+The server assumes that 
+* The project is a python project
+* There is a `src` folder in the root directory 
+* All test files are located in `src`
+* All test files follows the name convention `*tests.py`
+
 ## How to run the tests
 * Run `git clone git@github.com:jenniferclarsson/dd2480-lab-2.git` to clone the repository
 * Run `cd dd2480-lab-2`
