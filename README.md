@@ -42,7 +42,8 @@ GIT_BROKEN_SHA = '**SHA OF A NON EXISTING COMMIT**'
 * Run `python3 src/unit_tests.py` to run all unit tests. If all tests succeed, the program will output `OK`.
 
 ## Team (Essence)
---To be written--
+The states of the team are: Seeded, formed, collaborating, performing, adjourned.
+The seeded state was quickly passed in the first meeting. In the meetings to come, the state formed was also passed. Short before the deadline of assignment 1, the group had moved into the collaborating state, where the team is working is one cohesive unit and trust each other. As of now, the team is on it's way into the performing state, where they work efficiently and effectively. However, not enough time has been given to the team to fully adapt to changing contexts, and it’s hard to assess how a team is performing in just two/three weeks. As new groups will be formed for the next assignments, the team now moves into the adjourned state.
 
 ## List of contributions
 
