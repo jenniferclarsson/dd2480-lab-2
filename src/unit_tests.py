@@ -51,10 +51,10 @@ class git_clone_test(TestCase):
     # clone_repo should return "clone succeeded" given correct git_url and branch.
     def test_should_succeed_when_given_correct_link_and_branch(self):
         res = clone_repo(self.git_url, self.repo_dir, 'main')
-        self.assertEqual(res, 'clone succeded')
+        self.assertEqual(res, 'clone succeeded')
 
         # Remove clone if clone succeeded
-        if (res == 'clone succeded'):
+        if (res == 'clone succeeded'):
             remove_repo(self.repo_dir)
 
     # clone_repo should return "clone failed" if given broken link and correct branch.
@@ -156,7 +156,7 @@ class git_commit_status_test(TestCase):
     # owner, repo and sha, and valid state.
     def test_should_succeed_when_given_correct_info(self):
         res = set_commit_status(self.git_repo_owner, self.git_repo, self.git_sha, 'success')
-        self.assertEqual(res, 'commit status succeded')
+        self.assertEqual(res, 'commit status succeeded')
 
     # set_commit_status should return "commit status failed" when given correct
     # owner and repo, valid state, but incorrect sha.

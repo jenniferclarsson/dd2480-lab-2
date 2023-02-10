@@ -140,5 +140,5 @@ def set_commit_status(owner, repo, sha, state):
     api_url = f'https://api.github.com/repos/{owner}/{repo}/statuses/{sha}'
     response = requests.post(api_url, auth=(settings.GIT_USER, settings.GIT_TOKEN), json={'state':state})
     if response.status_code < 300:
-        return 'commit status succeded'
+        return 'commit status succeeded'
     return 'commit status failed'
