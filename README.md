@@ -15,7 +15,11 @@ To run the server you need to authenticate a Git user with push access to the re
 ```
 GIT_USER = '**GIT USERNAME THAT HAS PUSH ACCESS TO THE REPO IN WHICH YOU ADD THE WEBHOOK**'
 GIT_TOKEN = '**GIT PERSONAL ACCESS TOKEN TO GIT_USER**'
+**AND ALL OTHER VARIABLES NEEDED TO RUN THE PROJECT AND TESTS ON WHICH YOU USE THE SERVER**
 ```
+### Note
+If you want to test the CI server on it's own source code, you will need to add all the env variables which are required for the tests. See: How to run the tests.
+
 * Run `python3 src/server.py` to run the server and make it visable on the internet. This command will output a public URL `xyz.ngrok.io`.
 * Add a webhook on github using this payload URL `xyz.ngrok.io/github`. Content type should be `application/json`, the rest of the settings should be default.
 
