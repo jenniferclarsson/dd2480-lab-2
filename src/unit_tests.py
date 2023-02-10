@@ -44,10 +44,10 @@ class git_clone_test(TestCase):
 
     def test_should_succeed_when_given_correct_link_and_branch(self):
         res = clone_repo(self.git_url, self.repo_dir, 'main')
-        self.assertEqual(res, 'clone succeded')
+        self.assertEqual(res, 'clone succeeded')
 
         #Remove clone if succeded
-        if (res == 'clone succeded'):
+        if (res == 'clone succeeded'):
             remove_repo(self.repo_dir)
 
     def test_should_fail_when_given_broken_link_but_correct_branch(self):
@@ -131,7 +131,7 @@ class git_commit_status_test(TestCase):
 
     def test_should_succeed_when_given_correct_info(self):
         res = set_commit_status(self.git_repo_owner, self.git_repo, self.git_sha, 'success')
-        self.assertEqual(res, 'commit status succeded')
+        self.assertEqual(res, 'commit status succeeded')
 
     def test_should_fail_when_given_broken_sha(self):
         res = set_commit_status(self.git_repo_owner, self.git_repo, self.git_broken_sha, 'success')
