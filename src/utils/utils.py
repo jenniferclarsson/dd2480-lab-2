@@ -10,6 +10,10 @@ import shutil
 import requests
 import utils.settings as settings
 
+# Finds and runs the tests in test_folder if they match pattern test_file_patterns
+# And logs it to test_output_file
+# The function uses the settings file for parameters who are None
+# return false on failed tests and true on no failed test
 def run_tests(test_folder=None, test_file_pattern=None, test_output_file=None):
 
     test_folder = settings.test_folder if test_folder is None else test_folder
@@ -28,6 +32,11 @@ def run_tests(test_folder=None, test_file_pattern=None, test_output_file=None):
         run = testrunner.run(tests)
     return not bool(run.errors + run.failures)
 
+# Parses the json data received from the github webhook and retrieves
+# the fields we are interested in, which is currently clone_url, branch,
+# repo_owner, repo_name and commit_sha
+# returns clone_url, branch, repo_owner, repo_name, commit_sha
+# on success and the string "invalid json" on fail
 def parse_json(data):
     try:
         clone_url = data["repository"]["clone_url"]
@@ -39,13 +48,20 @@ def parse_json(data):
     except:
         return "invalid json"
 
+# Clones the directory hosted at git_url into the path specified by repo_dir
+# And checkouts the branch specified by the branch parameter
+# Returns the string "clone succeeded" on success and the string
+# "clone failed" on failure
 def clone_repo(git_url, repo_dir, branch):
     try:
         repo = Repo.clone_from(git_url, repo_dir, branch=branch)
-        return 'clone succeded'
+        return 'clone succeeded'
     except:
         return 'clone failed'
 
+# Removes the repository at path repo_dir
+# Returns the string "Repo succeeded" on success
+# and the string "Invalid path" on fail
 def remove_repo(repo_dir):
     try:
         shutil.rmtree(repo_dir)
@@ -53,6 +69,10 @@ def remove_repo(repo_dir):
     except:
         return 'Invalid path'
     
+# Performs a syntax check on the repository specified by path
+# using Pylint. Only checks for fatal errors
+# Returns "build successful" if no errors were detected
+# and "build failed" if there was errors detected
 def syntax_check(path):
     try: 
         args = ["--disable=W,R,C,undefined-variable", str(path)]
