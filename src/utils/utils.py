@@ -20,7 +20,7 @@ def run_tests(test_folder=None, test_file_pattern=None, test_output_file=None):
     test_folder = settings.test_folder if test_folder is None else test_folder
     test_file_pattern = settings.test_file_pattern if test_file_pattern is None else test_file_pattern
     test_output_file = settings.test_output_file if test_output_file is None else test_output_file
-    test_folder = test_folder.replace(" ", "\ ")
+    test_folder = str(test_folder).replace(" ", "\ ")
 
     sep = os.path.sep
     curdir = os.path.dirname(__file__).split(sep)
@@ -29,7 +29,7 @@ def run_tests(test_folder=None, test_file_pattern=None, test_output_file=None):
 
     with open(test_output_file, "w") as f:
         # bashCommand = ['bash', '-c', f'cd {test_folder} && python -m unittest -v unit_tests.py']
-        bashCommand = ['bash', '-c', f'cd {test_folder} && python -m unittest -v {test_file_pattern}']
+        bashCommand = ['bash', '-c', f'cd {test_folder} && python -m unittest -v ' f'{test_file_pattern}']
         process = subprocess.Popen(bashCommand, stdout=subprocess.PIPE)
         output, error = process.communicate()
         # print(output)
