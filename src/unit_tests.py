@@ -90,7 +90,8 @@ class remove_repo_test(TestCase):
 class test_runner_test(TestCase):
 
     def setUp(self):
-        settings.test_folder = "./test_data/dummy_tests"
+        # settings.test_folder = "/test_data/dummy_tests"
+        settings.test_folder = os.path.join(ROOT_DIR, "src/test_data/dummy_tests")
         settings.test_output_file = "/tmp/garbage.log"
         self.current_modules = list(sys.modules.keys())
 
@@ -114,11 +115,11 @@ class test_runner_test(TestCase):
 
     # run_tests should return True when the repo is faultless and all tests pass.
     def test_should_succeed_when_repo_is_test_project_faultless(self):
-        self.assertTrue(run_tests(test_folder=os.path.join(ROOT_DIR, "test_project_faultless"), test_file_pattern="test_main.py"))
+        self.assertTrue(run_tests(test_folder=os.path.join(ROOT_DIR, "test_project_faultless/src"), test_file_pattern="test_main.py"))
 
     # run_tests should return False when repo contains at least one failing test.
     def test_should_fail_when_repo_is_test_project_failing_tests(self):
-        self.assertFalse(run_tests(test_folder=os.path.join(ROOT_DIR, "test_project_failing_tests"), test_file_pattern="test_main.py"))
+        self.assertFalse(run_tests(test_folder=os.path.join(ROOT_DIR, "test_project_failing_tests/src"), test_file_pattern="test_main.py"))
 
         
 # --------------- BUILD TEST -----------------
