@@ -1,7 +1,6 @@
 import os
 from unittest import TestLoader, TextTestRunner
 
-from git import Repo
 from pylint import lint
 from datetime import datetime
 from pylint.reporters import text
@@ -10,6 +9,7 @@ import shutil
 import requests
 import utils.settings as settings
 import subprocess
+from git import Repo
 
 # Finds and runs the tests in test_folder if they match pattern test_file_patterns
 # And logs it to test_output_file
@@ -28,11 +28,9 @@ def run_tests(test_folder=None, test_file_pattern=None, test_output_file=None):
     test_output_file = sep.join(curdir + test_output_file.split(sep)) if not os.path.isabs(test_output_file) else test_output_file
 
     with open(test_output_file, "w") as f:
-        # bashCommand = ['bash', '-c', f'cd {test_folder} && python -m unittest -v unit_tests.py']
-        bashCommand = ['bash', '-c', f'cd {test_folder} && python -m unittest -v ' f'{test_file_pattern}']
+        bashCommand = ['bash', '-c', f'cd {test_folder} && python3 -m unittest -v ' f'{test_file_pattern}']
         process = subprocess.Popen(bashCommand, stdout=subprocess.PIPE)
         output, error = process.communicate()
-        # print(output)
         f.write(str(output))
     return not bool(process.returncode)
 
