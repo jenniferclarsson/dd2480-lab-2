@@ -4,11 +4,11 @@ from pathlib import Path
 
 load_dotenv()
 
-test_folder=".."
-test_file_pattern="*tests.py"
+test_folder=""
+test_file_pattern="unit_tests.py"
 test_output_file="./tests.log"
 
-repo_dir = Path('/tmp/cloned-repo-to-be-tested/')
+repo_dir = Path('/tmp/cloned-repo-to-be-tested')
 repo_dir_src = Path('/tmp/cloned-repo-to-be-tested/src')
 
 GIT_USER = os.getenv('GIT_USER')

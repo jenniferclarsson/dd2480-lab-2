@@ -2,6 +2,7 @@ from flask import Flask, request, make_response
 from pyngrok import ngrok
 from utils.utils import *
 import utils.settings as settings
+from pathlib import Path
 
 public_url = ngrok.connect(8080).public_url
 app = Flask(__name__)
@@ -25,14 +26,15 @@ def webhook():
                 # read data from JSON-object
                 clone_url, branch, repo_owner, repo_name, commit_sha = parse_json(data)
                 # Clone repo for running local build and test
-                clone_repo(clone_url, settings.repo_dir, branch)
+                clone_repo(clone_url, f'{settings.repo_dir}-{commit_sha}', branch)
+                repo_dir_src = Path(f'{settings.repo_dir}-{commit_sha}/src')
                 # Syntax analysis using Pylint
-                build_result = syntax_check(settings.repo_dir_src)
+                build_result = syntax_check(repo_dir_src)
                 log_entry = 'Build failed'
                 commit_status = 'error'
                 if build_result == "build successful":
                     # Run projects own unit tests
-                    test_results = run_tests(settings.repo_dir_src)
+                    test_results = run_tests(repo_dir_src)
                     log_entry = 'Tests failed'
                     if test_results:
                         commit_status = 'success'
@@ -48,7 +50,8 @@ def webhook():
                 remove_repo(settings.repo_dir)
                 
                 return make_response("success", 200)
-            except:
+            except Exception as e: 
+                print(e)
                 return make_response("fail", 400)
         elif headers["X-GitHub-Event"] == "ping":
             # Used for troubleshooting

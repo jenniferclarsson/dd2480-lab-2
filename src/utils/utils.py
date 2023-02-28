@@ -1,7 +1,6 @@
 import os
 from unittest import TestLoader, TextTestRunner
 
-from git import Repo
 from pylint import lint
 from datetime import datetime
 from pylint.reporters import text
@@ -9,6 +8,8 @@ from io import StringIO
 import shutil
 import requests
 import utils.settings as settings
+import subprocess
+from git import Repo
 
 # Finds and runs the tests in test_folder if they match pattern test_file_patterns
 # And logs it to test_output_file
@@ -19,18 +20,19 @@ def run_tests(test_folder=None, test_file_pattern=None, test_output_file=None):
     test_folder = settings.test_folder if test_folder is None else test_folder
     test_file_pattern = settings.test_file_pattern if test_file_pattern is None else test_file_pattern
     test_output_file = settings.test_output_file if test_output_file is None else test_output_file
+    test_folder = str(test_folder).replace(" ", "\ ")
 
     sep = os.path.sep
     curdir = os.path.dirname(__file__).split(sep)
     test_folder = sep.join(curdir + test_folder.split(sep)) if not os.path.isabs(test_folder) else test_folder
     test_output_file = sep.join(curdir + test_output_file.split(sep)) if not os.path.isabs(test_output_file) else test_output_file
 
-    testloader = TestLoader()
-    tests = testloader.discover(test_folder, test_file_pattern)
     with open(test_output_file, "w") as f:
-        testrunner = TextTestRunner(f)
-        run = testrunner.run(tests)
-    return not bool(run.errors + run.failures)
+        bashCommand = ['bash', '-c', f'cd {test_folder} && python3 -m unittest -v ' f'{test_file_pattern}']
+        process = subprocess.Popen(bashCommand, stdout=subprocess.PIPE)
+        output, error = process.communicate()
+        f.write(str(output))
+    return not bool(process.returncode)
 
 # Parses the json data received from the github webhook and retrieves
 # the fields we are interested in, which is currently clone_url, branch,
@@ -75,7 +77,7 @@ def remove_repo(repo_dir):
 # and "build failed" if there was errors detected
 def syntax_check(path):
     try: 
-        args = ["--disable=W,R,C,undefined-variable", str(path)]
+        args = ["--disable=W,R,C,undefined-variable,import-error", str(path)]
         pylint_output = StringIO()
         reporter = text.ColorizedTextReporter(pylint_output)
         run = lint.Run(args, reporter=reporter, exit=False)
