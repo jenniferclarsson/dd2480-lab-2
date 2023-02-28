@@ -1,5 +1,5 @@
 # DD2480 - LAB 2, Continuous Integration
-
+Hej
 Assessment branch 3
 
 ## A small continuous integration CI server
