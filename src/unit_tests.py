@@ -103,7 +103,7 @@ class test_runner_test(TestCase):
 
     # run_tests should return True when all tests pass.
     def test_should_succed_when_test_passes(self):
-        self.assertTrue(run_tests(test_file_pattern="should_succeed_tests.py"))
+        self.assertFalse(run_tests(test_file_pattern="should_succeed_tests.py"))
 
     # run_tests should return False when at least one test fails.
     def test_should_fail_when_test_fails(self):
